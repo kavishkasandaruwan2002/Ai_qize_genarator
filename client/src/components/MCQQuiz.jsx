@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { CheckCircle, XCircle, ChevronRight, Award, RotateCcw, Download, Sparkles } from 'lucide-react';
-import { addQuizAttempt } from '../services/note';
+import { CheckCircle, XCircle, ChevronRight, Award, RotateCcw, Download, Sparkles, Loader2 } from 'lucide-react';
+import { addQuizAttempt, generateNoteQuizzes } from '../services/note';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-const MCQQuiz = ({ quizzes = [], noteId }) => {
+const MCQQuiz = ({ quizzes = [], noteId, onQuizzesGenerated }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
   const [savingAttempt, setSavingAttempt] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState('');
 
   const currentQuestion = quizzes[currentQuestionIndex];
 
@@ -159,10 +161,56 @@ const MCQQuiz = ({ quizzes = [], noteId }) => {
     printWindow.document.close();
   };
 
+  const handleGenerateQuizzes = async () => {
+    setGenerating(true);
+    setGenerationError('');
+    try {
+      const data = await generateNoteQuizzes(noteId);
+      if (onQuizzesGenerated) {
+        onQuizzesGenerated(data.quizzes);
+      }
+    } catch (err) {
+      console.error(err);
+      setGenerationError(err.response?.data?.message || 'Failed to generate MCQ quiz. Please try again.');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   if (quizzes.length === 0) {
     return (
-      <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-        <p className="text-slate-500 dark:text-slate-400 text-sm">No quiz questions generated for this note.</p>
+      <div className="max-w-md mx-auto text-center py-16 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="inline-flex p-4 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-3xl mb-6">
+          <Sparkles size={40} className={generating ? "animate-pulse" : ""} />
+        </div>
+        <h3 className="text-xl font-bold mb-2 text-slate-800 dark:text-slate-100">No MCQ Quiz Yet</h3>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 leading-relaxed">
+          Test your knowledge! We can automatically generate a custom multiple-choice quiz based on the text of your uploaded PDF.
+        </p>
+
+        {generationError && (
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/50 rounded-xl text-red-600 dark:text-red-400 text-sm font-medium">
+            {generationError}
+          </div>
+        )}
+
+        <button
+          onClick={handleGenerateQuizzes}
+          disabled={generating}
+          className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-semibold text-sm rounded-xl shadow-md shadow-indigo-600/10 hover:shadow-lg transition-all cursor-pointer"
+        >
+          {generating ? (
+            <>
+              <Loader2 size={16} className="animate-spin" />
+              <span>Generating Quiz...</span>
+            </>
+          ) : (
+            <>
+              <Sparkles size={16} />
+              <span>Generate MCQ Quiz</span>
+            </>
+          )}
+        </button>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import Note from '../models/Note.js';
 import { extractTextFromPDF } from '../services/pdfService.js';
-import { generateStudyMaterials } from '../services/aiService.js';
+import { generateStudyMaterials, generateQuizzes } from '../services/aiService.js';
 
 /**
  * @desc    Upload PDF, extract text, run AI generation, and save note
@@ -178,5 +178,42 @@ export const addQuizAttempt = async (req, res) => {
   } catch (error) {
     console.error('Add Quiz Attempt Error:', error);
     return res.status(500).json({ message: 'Server error saving quiz attempt' });
+  }
+};
+
+/**
+ * @desc    Generate MCQs/quizzes for a note if they don't exist
+ * @route   POST /api/notes/:id/generate-quizzes
+ * @access  Private
+ */
+export const generateQuizzesForNote = async (req, res) => {
+  try {
+    const note = await Note.findOne({ _id: req.params.id, userId: req.user._id });
+
+    if (!note) {
+      return res.status(404).json({ message: 'Study note not found' });
+    }
+
+    if (!note.extractedText || note.extractedText.trim().length === 0) {
+      return res.status(400).json({ message: 'This note has no extracted text to generate MCQs from.' });
+    }
+
+    const cleanText = note.extractedText.trim();
+    const maxLength = 25000;
+    const processingText = cleanText.length > maxLength 
+      ? cleanText.substring(0, maxLength) + '\n[Note: Content truncated for AI processing]' 
+      : cleanText;
+
+    console.log(`Generating MCQs for note "${note.title}" (${note._id})...`);
+    const quizzes = await generateQuizzes(processingText);
+
+    note.quizzes = quizzes;
+    await note.save();
+
+    console.log(`Successfully generated and saved ${quizzes.length} MCQs for note: ${note.title}`);
+    return res.json({ quizzes });
+  } catch (error) {
+    console.error('Generate Quizzes Controller Error:', error);
+    return res.status(500).json({ message: error.message || 'Server error generating MCQs' });
   }
 };

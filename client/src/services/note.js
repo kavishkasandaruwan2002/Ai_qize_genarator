@@ -37,3 +37,9 @@ export const addQuizAttempt = async (id, score, totalQuestions) => {
   const response = await API.post(`/notes/${id}/quiz-attempt`, { score, totalQuestions });
   return response.data;
 };
+
+export const generateNoteQuizzes = async (id) => {
+  const response = await API.post(`/notes/${id}/generate-quizzes`);
+  return response.data;
+};
+

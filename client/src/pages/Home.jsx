@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { isAuthenticated } from '../services/auth';
+import { HeroGeometric } from '@/components/ui/shape-landing-hero';
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,12 +61,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 overflow-hidden relative">
       
-      {/* Background Glow Orbs */}
-      <div className="glow-orb w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-600/5 top-[-10%] left-[-10%]" />
-      <div className="glow-orb w-[500px] h-[500px] bg-violet-500/10 dark:bg-violet-600/5 bottom-[-10%] right-[-5%]" style={{ animationDelay: '-4s' }} />
-
       {/* Navigation Header */}
-      <header className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between relative z-20">
+      <header className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between absolute top-0 left-0 right-0 z-20">
         <div className="flex items-center gap-3">
           <div className="bg-indigo-600 p-2.5 rounded-2xl text-white shadow-md shadow-indigo-600/20">
             <BookOpen size={22} />
@@ -78,7 +75,7 @@ const Home = () => {
         <div className="flex items-center gap-4">
           <button
             onClick={toggleDarkMode}
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-all cursor-pointer"
+            className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
           >
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -93,7 +90,7 @@ const Home = () => {
             </Link>
           ) : (
             <>
-              <Link to="/login" className="text-sm font-semibold hover:text-indigo-600 transition-colors">
+              <Link to="/login" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors">
                 Sign In
               </Link>
               <Link
@@ -108,114 +105,85 @@ const Home = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 pt-16 pb-24 relative z-10 text-center flex flex-col items-center">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-3xl space-y-6"
-        >
-          <motion.span 
-            variants={itemVariants}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 rounded-full text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase"
+      <HeroGeometric
+        badge="AI-Powered Learning Suite"
+        title1="Study Smarter, Not Harder with"
+        title2="AI Study Assistant"
+        description="Upload your lecture slides, notes, or textbook PDFs. Our advanced AI automatically extracts key concepts, generates clean summaries, builds interactive quizzes, and designs custom flashcard decks."
+      >
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+          <Link
+            to={isLoggedIn ? "/dashboard" : "/register"}
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-base px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 hover:scale-[1.02] transition-all cursor-pointer w-full sm:w-auto justify-center"
           >
-            <Sparkles size={12} className="animate-pulse-slow" /> AI-Powered Learning Suite
-          </motion.span>
+            Get Started Free
+            <ArrowRight size={18} />
+          </Link>
           
-          <motion.h1 
-            variants={itemVariants}
-            className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] text-slate-900 dark:text-white"
+          <a
+            href="#features"
+            className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-base px-8 py-4 rounded-2xl transition-all cursor-pointer w-full sm:w-auto"
           >
-            Study Smarter, Not Harder with{' '}
-            <span className="bg-gradient-to-r from-indigo-600 via-violet-500 to-purple-600 bg-clip-text text-transparent dark:from-indigo-400 dark:via-violet-400 dark:to-purple-400">
-              AI Study Assistant
-            </span>
-          </motion.h1>
-
-          <motion.p 
-            variants={itemVariants}
-            className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed"
-          >
-            Upload your lecture slides, notes, or textbook PDFs. Our advanced AI automatically extracts key concepts, generates clean summaries, builds interactive quizzes, and designs custom flashcard decks.
-          </motion.p>
-
-          <motion.div 
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4"
-          >
-            <Link
-              to={isLoggedIn ? "/dashboard" : "/register"}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-base px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 hover:scale-[1.02] transition-all cursor-pointer w-full sm:w-auto justify-center"
-            >
-              Get Started Free
-              <ArrowRight size={18} />
-            </Link>
-            
-            <a
-              href="#features"
-              className="flex items-center justify-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-base px-8 py-4 rounded-2xl transition-all cursor-pointer w-full sm:w-auto"
-            >
-              Explore Features
-            </a>
-          </motion.div>
-        </motion.div>
+            Explore Features
+          </a>
+        </div>
 
         {/* Dashboard Preview mockup (with fade-in-up animation) */}
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
-          className="mt-16 w-full max-w-5xl rounded-3xl overflow-hidden border border-slate-200/60 dark:border-slate-800/60 shadow-2xl relative bg-white/70 dark:bg-slate-900/50 backdrop-blur-md p-2"
+          transition={{ delay: 0.8, duration: 0.8, ease: 'easeOut' }}
+          className="mt-16 w-full max-w-5xl rounded-3xl overflow-hidden border border-white/[0.08] shadow-2xl relative bg-white/[0.02] backdrop-blur-md p-2 mx-auto"
         >
-          <div className="rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 aspect-[16/9] flex items-center justify-center">
+          <div className="rounded-2xl overflow-hidden bg-[#030303]/80 border border-white/[0.08] aspect-[16/9] flex items-center justify-center">
             {/* Simulated UI Preview */}
             <div className="w-full h-full p-6 flex flex-col justify-between text-left">
-              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-rose-400" />
                   <div className="w-3 h-3 rounded-full bg-amber-400" />
                   <div className="w-3 h-3 rounded-full bg-emerald-400" />
-                  <span className="text-xs font-bold text-slate-400 ml-4">AI Study Room - Biology_Lec3.pdf</span>
+                  <span className="text-xs font-bold text-white/40 ml-4">AI Study Room - Biology_Lec3.pdf</span>
                 </div>
-                <div className="h-5 w-24 bg-slate-200 dark:bg-slate-800 rounded-md" />
+                <div className="h-5 w-24 bg-white/[0.05] rounded-md" />
               </div>
 
               <div className="flex-1 grid grid-cols-3 gap-6 py-6">
-                <div className="col-span-1 bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                <div className="col-span-1 bg-white/[0.02] rounded-xl p-4 border border-white/[0.05] flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="h-4 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded px-2 text-[10px] font-bold w-max">SUMMARY</div>
-                    <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-3/4" />
-                    <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-5/6" />
-                    <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-2/3" />
+                    <div className="h-4 bg-indigo-500/10 text-indigo-400 rounded px-2 text-[10px] font-bold w-max">SUMMARY</div>
+                    <div className="h-3 bg-white/10 rounded w-3/4" />
+                    <div className="h-3 bg-white/10 rounded w-5/6" />
+                    <div className="h-3 bg-white/10 rounded w-2/3" />
                   </div>
-                  <div className="h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full w-2/3" />
+                  <div className="h-2 bg-indigo-500 rounded-full w-2/3" />
                 </div>
 
-                <div className="col-span-1 bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                <div className="col-span-1 bg-white/[0.02] rounded-xl p-4 border border-white/[0.05] flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="h-4 bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded px-2 text-[10px] font-bold w-max">MCQ QUIZ</div>
-                    <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-full" />
+                    <div className="h-4 bg-emerald-500/10 text-emerald-400 rounded px-2 text-[10px] font-bold w-max">MCQ QUIZ</div>
+                    <div className="h-3 bg-white/10 rounded w-full" />
                     <div className="space-y-1">
-                      <div className="h-5 bg-slate-100 dark:bg-slate-800/50 rounded w-full border border-slate-200 dark:border-slate-700" />
-                      <div className="h-5 bg-emerald-50 dark:bg-emerald-950/30 rounded w-full border border-emerald-500/30" />
+                      <div className="h-5 bg-white/[0.03] rounded w-full border border-white/[0.05]" />
+                      <div className="h-5 bg-emerald-500/10 rounded w-full border border-emerald-500/20" />
                     </div>
                   </div>
-                  <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-full" />
+                  <div className="h-6 bg-white/[0.05] rounded-lg w-full" />
                 </div>
 
-                <div className="col-span-1 bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col justify-between items-center justify-center">
-                  <div className="h-4 bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 rounded px-2 text-[10px] font-bold w-max mb-4">FLASHCARDS</div>
-                  <div className="w-full aspect-[4/3] max-w-[120px] rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 flex flex-col justify-center items-center shadow-md">
-                    <Layers className="text-indigo-500 mb-1" size={20} />
-                    <span className="text-[9px] font-bold text-slate-400">Card 1 of 12</span>
+                <div className="col-span-1 bg-white/[0.02] rounded-xl p-4 border border-white/[0.05] flex flex-col justify-between items-center justify-center">
+                  <div className="h-4 bg-purple-500/10 text-purple-400 rounded px-2 text-[10px] font-bold w-max mb-4">FLASHCARDS</div>
+                  <div className="w-full aspect-[4/3] max-w-[120px] rounded-lg border border-white/[0.08] bg-white/[0.01] flex flex-col justify-center items-center shadow-md">
+                    <Layers className="text-indigo-400 mb-1" size={20} />
+                    <span className="text-[9px] font-bold text-white/40">Card 1 of 12</span>
                   </div>
-                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2 mt-4" />
+                  <div className="h-3 bg-white/10 rounded w-1/2 mt-4" />
                 </div>
               </div>
             </div>
           </div>
         </motion.div>
-      </section>
+      </HeroGeometric>
 
       {/* Features Grid (Scroll Triggered) */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-24 border-t border-slate-200/50 dark:border-slate-800/50 relative z-10">

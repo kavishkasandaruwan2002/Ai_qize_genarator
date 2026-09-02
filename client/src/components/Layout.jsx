@@ -224,7 +224,7 @@ const Layout = ({ children }) => {
               <Menu size={20} />
             </button>
             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
-              {location.pathname === '/' && 'Dashboard'}
+              {location.pathname === '/dashboard' && 'Dashboard'}
               {location.pathname === '/upload' && 'Upload Notes'}
               {location.pathname === '/favorites' && 'Favorites'}
               {location.pathname.startsWith('/note/') && 'Study Room'}

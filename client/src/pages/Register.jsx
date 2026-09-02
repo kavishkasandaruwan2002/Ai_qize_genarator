@@ -19,7 +19,7 @@ const Register = () => {
 
     try {
       await register(username, email, password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

@@ -5,7 +5,8 @@ import {
   getNoteById, 
   deleteNote, 
   toggleFavorite, 
-  addQuizAttempt 
+  addQuizAttempt,
+  generateQuizzesForNote
 } from '../controllers/notesController.js';
 import { protect } from '../middleware/auth.js';
 import upload from '../middleware/upload.js';
@@ -22,5 +23,6 @@ router.get('/:id', getNoteById);
 router.delete('/:id', deleteNote);
 router.patch('/:id/favorite', toggleFavorite);
 router.post('/:id/quiz-attempt', addQuizAttempt);
+router.post('/:id/generate-quizzes', generateQuizzesForNote);
 
 export default router;
