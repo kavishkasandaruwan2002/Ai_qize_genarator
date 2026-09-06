@@ -1,0 +1,89 @@
+name: CI Pipeline - Build & Push to Amazon ECR
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+  ECR_SERVER_REPO: ai-study-assistant-server
+  ECR_CLIENT_REPO: ai-study-assistant-client
+
+jobs:
+  lint-and-build:
+    name: Lint, Test & Push to ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            server/package-lock.json
+            client/package-lock.json
+
+      # Step 3: Install Server dependencies & test syntax
+      - name: Install & Check Server
+        run: |
+          cd server
+          npm ci
+          node --check src/index.js
+
+      # Step 4: Install Client dependencies & lint
+      - name: Install & Lint Client
+        run: |
+          cd client
+          npm ci
+          npm run lint
+
+      # Step 5: Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Step 6: Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Step 7: Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 8: Build and Push Server Image
+      - name: Build & Push Server Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_SERVER_REPO }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_SERVER_REPO }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Step 9: Build and Push Client Image
+      - name: Build & Push Client Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          file: ./client/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_CLIENT_REPO }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_CLIENT_REPO }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
