@@ -6,86 +6,25 @@ import {
   HelpCircle, 
   Layers, 
   ArrowRight, 
-  Cpu, 
-  Moon, 
-  Sun 
+  Cpu
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { isAuthenticated } from '../services/auth';
 import { HeroGeometric } from '@/components/ui/shape-landing-hero';
+import { Navbar1 } from '@/components/ui/navbar-1';
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
-    
-    // Theme initialization
-    const isDark = localStorage.getItem('theme') === 'dark' || 
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    setDarkMode(isDark);
   }, []);
-
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 overflow-hidden relative">
       
-      {/* Navigation Header */}
-      <header className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between absolute top-0 left-0 right-0 z-20">
-        <div className="flex items-center gap-3">
-          <div className="bg-indigo-600 p-2.5 rounded-2xl text-white shadow-md shadow-indigo-600/20">
-            <BookOpen size={22} />
-          </div>
-          <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-violet-400">
-            StudyAI
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <button
-            onClick={toggleDarkMode}
-            className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-          >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-
-          {isLoggedIn ? (
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
-            >
-              Go to Dashboard
-              <ArrowRight size={16} />
-            </Link>
-          ) : (
-            <>
-              <Link to="/login" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors">
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md shadow-indigo-600/15 hover:shadow-lg hover:shadow-indigo-600/25 transition-all"
-              >
-                Get Started Free
-              </Link>
-            </>
-          )}
-        </div>
-      </header>
+      {/* Dynamic Navbar */}
+      <Navbar1 />
 
       {/* Hero Section */}
       <HeroGeometric
