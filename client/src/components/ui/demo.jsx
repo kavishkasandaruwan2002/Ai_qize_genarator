@@ -1,14 +1,11 @@
-import React from "react";
-import { HeroGeometric } from "./shape-landing-hero";
+import { Navbar1 } from "@/components/ui/navbar-1"
 
-function DemoHeroGeometric() {
+const Demo = () => {
     return (
-        <HeroGeometric
-            badge="Kokonut UI"
-            title1="Elevate Your"
-            title2="Digital Vision"
-        />
-    );
+        <>
+            <Navbar1/>
+        </>
+    )
 }
 
-export { DemoHeroGeometric };
+export { Demo }
