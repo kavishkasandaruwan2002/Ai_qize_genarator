@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   BookOpen, 
-  Sparkles, 
   FileText, 
   HelpCircle, 
   Layers, 
   ArrowRight, 
-  CheckCircle2, 
   Cpu, 
-  Zap, 
-  Shield, 
   Moon, 
   Sun 
 } from 'lucide-react';
@@ -43,19 +39,6 @@ const Home = () => {
       document.body.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
   };
 
   return (

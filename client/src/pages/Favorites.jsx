@@ -6,8 +6,7 @@ import {
   Trash2,
   ArrowRight,
   Calendar,
-  Search,
-  BookOpen
+  Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

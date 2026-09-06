@@ -54,7 +54,7 @@ const SummaryView = ({ summary = [], title = 'Study Note' }) => {
             <Sparkles size={18} />
           </div>
           <div>
-            <h3 className="font-bold text-lg">AI Summary</h3>
+            <h3 className="font-bold text-lg">{title}</h3>
             <p className="text-xs text-slate-500">Key revision concepts extracted from your notes</p>
           </div>
         </div>

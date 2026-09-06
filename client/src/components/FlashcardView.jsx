@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, RotateCcw, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, CheckCircle2, RotateCcw, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const FlashcardView = ({ flashcards = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

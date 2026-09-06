@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getNotes, toggleFavorite, deleteNote } from '../services/note';
 import {
-  FileText,
   Star,
   Trash2,
   ArrowRight,

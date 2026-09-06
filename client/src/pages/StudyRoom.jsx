@@ -6,12 +6,10 @@ import MCQQuiz from '../components/MCQQuiz';
 import FlashcardView from '../components/FlashcardView';
 import { 
   ArrowLeft, 
-  Sparkles, 
   FileText, 
   HelpCircle, 
   Layers, 
-  Star,
-  Loader2
+  Star
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

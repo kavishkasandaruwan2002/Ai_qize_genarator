@@ -10,7 +10,6 @@ const MCQQuiz = ({ quizzes = [], noteId, onQuizzesGenerated }) => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
-  const [savingAttempt, setSavingAttempt] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [generationError, setGenerationError] = useState('');
 
