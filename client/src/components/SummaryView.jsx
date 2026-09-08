@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Copy, Check, Search, Sparkles, BookOpen, FileText, Presentation } from 'lucide-react';
+import { Copy, Check, Search, Sparkles, BookOpen, FileText, Presentation, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { exportToPDF, exportToPPTX } from '../utils/exportUtils';
+import { exportToPDF, exportToPPTX, exportMindMapToPDF } from '../utils/exportUtils';
 
 const SummaryView = ({ summary = [], title = 'Study Note' }) => {
   const [copied, setCopied] = useState(false);
@@ -100,6 +100,16 @@ const SummaryView = ({ summary = [], title = 'Study Note' }) => {
           >
             <FileText size={16} className="text-rose-500" />
             <span>PDF</span>
+          </button>
+
+          {/* Export Mind Map PDF Button */}
+          <button
+            onClick={() => exportMindMapToPDF({ title, summary })}
+            className="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 rounded-xl text-sm font-medium transition-colors cursor-pointer shrink-0"
+            title="Export Visual Mind Map PDF"
+          >
+            <Share2 size={16} className="text-emerald-500" />
+            <span>Mind Map</span>
           </button>
 
           {/* Export PPT Button */}

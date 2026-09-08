@@ -512,3 +512,111 @@ export const exportToPPTX = ({ title = 'Study Note', summary = [], flashcards = 
   const filename = `${sanitizeFilename(title)}_Presentation.pptx`;
   pptx.writeFile({ fileName: filename });
 };
+
+/**
+ * Export Study Summary as a Visual Mind Map PDF
+ */
+export const exportMindMapToPDF = ({ title = 'Study Note', summary = [] }) => {
+  const jsPDFClass = typeof jsPDF === 'function' ? jsPDF : (jsPDF.jsPDF || jsPDF.default || jsPDF);
+  const doc = new jsPDFClass({ unit: 'pt', format: 'a4', orientation: 'landscape' });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // Background
+  doc.setFillColor(248, 250, 252);
+  doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+  // Title Header Banner
+  doc.setFillColor(79, 70, 229);
+  doc.rect(0, 0, pageWidth, 50, 'F');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(255, 255, 255);
+  doc.text(`🧠 MIND MAP: ${title.toUpperCase()}`, pageWidth / 2, 32, { align: 'center' });
+
+  // Center Node Position
+  const centerX = pageWidth / 2;
+  const centerY = pageHeight / 2 + 10;
+  const centerW = 180;
+  const centerH = 50;
+
+  const colors = [
+    [244, 63, 94],  // Rose
+    [16, 185, 129], // Emerald
+    [245, 158, 11], // Amber
+    [6, 182, 212]   // Cyan
+  ];
+
+  // Chunk summary items into 4 main branch pillars
+  const branchCount = Math.min(summary.length, 4);
+  const branchCoords = [
+    { x: 140, y: 120, w: 230, h: 180 },
+    { x: 470, y: 120, w: 230, h: 180 },
+    { x: 140, y: 340, w: 230, h: 180 },
+    { x: 470, y: 340, w: 230, h: 180 }
+  ];
+
+  for (let i = 0; i < branchCount; i++) {
+    const coords = branchCoords[i];
+    const color = colors[i % colors.length];
+
+    // Connecting Line
+    doc.setDrawColor(color[0], color[1], color[2]);
+    doc.setLineWidth(3);
+    doc.line(centerX, centerY, coords.x + coords.w / 2, coords.y + coords.h / 2);
+  }
+
+  // Draw Center Node
+  doc.setFillColor(79, 70, 229);
+  doc.roundedRect(centerX - centerW / 2, centerY - centerH / 2, centerW, centerH, 12, 12, 'F');
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(2);
+  doc.roundedRect(centerX - centerW / 2, centerY - centerH / 2, centerW, centerH, 12, 12, 'S');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(255, 255, 255);
+  doc.text(doc.splitTextToSize(title, centerW - 20), centerX, centerY, { align: 'center' });
+
+  // Draw Branch Cards
+  for (let i = 0; i < branchCount; i++) {
+    const coords = branchCoords[i];
+    const color = colors[i % colors.length];
+    const itemText = summary[i];
+
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(coords.x, coords.y, coords.w, coords.h, 10, 10, 'F');
+    doc.setDrawColor(color[0], color[1], color[2]);
+    doc.setLineWidth(2);
+    doc.roundedRect(coords.x, coords.y, coords.w, coords.h, 10, 10, 'S');
+
+    doc.setFillColor(color[0], color[1], color[2]);
+    doc.roundedRect(coords.x, coords.y, coords.w, 32, 10, 10, 'F');
+    doc.rect(coords.x, coords.y + 20, coords.w, 12, 'F');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(255, 255, 255);
+    doc.text(`Pillar 0${i + 1}`, coords.x + 10, coords.y + 20);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(51, 65, 85);
+
+    const lines = doc.splitTextToSize(itemText, coords.w - 20);
+    lines.forEach((l, lIdx) => {
+      doc.text(l, coords.x + 12, coords.y + 55 + lIdx * 14);
+    });
+  }
+
+  // Footer
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(148, 163, 184);
+  doc.text("AI Study Assistant • Mind Map Study Sheet", pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+  const filename = `${sanitizeFilename(title)}_MindMap.pdf`;
+  doc.save(filename);
+};
+
