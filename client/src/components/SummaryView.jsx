@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Copy, Check, Search, Sparkles, BookOpen } from 'lucide-react';
+import { Copy, Check, Search, Sparkles, BookOpen, FileText, Presentation } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { exportToPDF, exportToPPTX } from '../utils/exportUtils';
 
 const SummaryView = ({ summary = [], title = 'Study Note' }) => {
   const [copied, setCopied] = useState(false);
@@ -75,7 +76,8 @@ const SummaryView = ({ summary = [], title = 'Study Note' }) => {
           {/* Copy Button */}
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 px-3.5 py-2 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium transition-colors cursor-pointer shrink-0"
+            className="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium transition-colors cursor-pointer shrink-0"
+            title="Copy summary text"
           >
             {copied ? (
               <>
@@ -85,9 +87,29 @@ const SummaryView = ({ summary = [], title = 'Study Note' }) => {
             ) : (
               <>
                 <Copy size={16} className="text-slate-500" />
-                <span>Copy All</span>
+                <span>Copy</span>
               </>
             )}
+          </button>
+
+          {/* Export PDF Button */}
+          <button
+            onClick={() => exportToPDF({ title, summary })}
+            className="flex items-center gap-2 px-3 py-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800/60 text-rose-700 dark:text-rose-300 rounded-xl text-sm font-medium transition-colors cursor-pointer shrink-0"
+            title="Export as PDF Document"
+          >
+            <FileText size={16} className="text-rose-500" />
+            <span>PDF</span>
+          </button>
+
+          {/* Export PPT Button */}
+          <button
+            onClick={() => exportToPPTX({ title, summary })}
+            className="flex items-center gap-2 px-3 py-2 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 rounded-xl text-sm font-medium transition-colors cursor-pointer shrink-0"
+            title="Export as PowerPoint (.pptx) Presentation"
+          >
+            <Presentation size={16} className="text-indigo-500" />
+            <span>PPTX</span>
           </button>
         </div>
       </div>
