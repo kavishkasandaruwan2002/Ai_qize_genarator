@@ -1,0 +1,21 @@
+services:
+  server:
+    image: 141218266130.dkr.ecr.eu-north-1.amazonaws.com/ai-study-assistant-server:latest
+    container_name: ai-study-assistant-server
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - PORT=5000
+    restart: always
+
+  client:
+    image: 141218266130.dkr.ecr.eu-north-1.amazonaws.com/ai-study-assistant-client:latest
+    container_name: ai-study-assistant-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    restart: always
+
